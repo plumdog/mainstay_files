@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponse
 from django.core.servers.basehttp import FileWrapper
+
 import os
 
 from mimetypes import guess_type
 
 from .forms import DirectoryForm, FileForm
 from .models import Directory, File
-
-#from django.conf import settings
+from mainstay.crud import MainstayCreateView, MainstayUpdateView
 
 
 def _for_directory(request, directory_id):
@@ -31,35 +31,21 @@ def directory(request, directory_id):
     return _for_directory(request, directory_id)
 
 
-def add_directory(request):
-    if request.method == 'POST':
-        form = DirectoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Directory added')
-            return redirect('mainstay_files:index')
-        else:
-            messages.error(request, 'Errors')
-    else:
-        form = DirectoryForm()
-
-    return render(request, 'mainstay_files/add_directory.html', {'form': form})    
+class AddDirectory(MainstayCreateView):
+    template_name = 'mainstay_files/add_directory.html'
+    form_class = DirectoryForm
+    reverse_success_url = 'mainstay_files:index'
+    success_message = 'Directory added'
 
 
-def edit_directory(request, directory_id):
-    directory_ = get_object_or_404(Directory, id=directory_id)
-    if request.method == 'POST':
-        form = DirectoryForm(request.POST, instance=directory_)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Directory editted')
-            return redirect('mainstay_files:index')
-        else:
-            messages.error(request, 'Errors')
-    else:
-        form = DirectoryForm(instance=directory_)
+class EditDirectory(MainstayUpdateView):
+    template_name = 'mainstay_files/edit_directory.html'
+    model = Directory
+    form_class = DirectoryForm
+    reverse_success_url = 'mainstay_files:index'
+    success_message = 'Directory updated'
+    pk_url_kwarg = 'directory_id'
 
-    return render(request, 'mainstay_files/edit_directory.html', {'form': form})
 
 def add_file(request):
     if request.method == 'POST':
