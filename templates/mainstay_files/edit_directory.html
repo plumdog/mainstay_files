@@ -1,0 +1,11 @@
+{% extends "mainstay_files/base.html" %}
+
+{% load form_printer %}
+
+{% block title %}
+{{ block.super }} - Edit Directory
+{% endblock %}
+
+{% block content %}
+{% showform form %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "mainstay_wiki/base.html" %}
+
+{% load form_printer %}
+
+{% block title %}
+{{ block.super }} - Add File
+{% endblock %}
+
+{% block content %}
+{% showform form %}
+{% endblock %}

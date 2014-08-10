@@ -1,0 +1,32 @@
+{% extends "mainstay_files/base.html" %}
+
+{% load form_printer %}
+
+{% block content %}
+  {% if directory %}
+    <p>Files within {{ directory.name }}</p>
+  {% endif %}
+
+  <p><a href="{% url 'mainstay_files:add_directory' %}">Add a new directory</a></p>
+  <p><a href="{% url 'mainstay_files:add_file' %}">Add a new file</a></p>
+
+  <h3>Directories</h3>
+  {% if directories %}
+    {% for p in directories %}
+      <p>
+        <a href="{% url 'mainstay_files:directory' p.id %}">{{ p.name }}</a> |
+		<a href="{% url 'mainstay_files:edit_directory' p.id %}">Edit</a>
+      </p>
+    {% endfor %}
+  {% endif %}
+
+  <h3>Files</h3>
+  {% if files %}
+    {% for p in files %}
+      <p>
+        <a href="{% url 'mainstay_files:download_file' p.id %}">{{ p.name }}</a> |
+        <a href="{% url 'mainstay_files:edit_file' p.id %}">Edit</a>
+	  </p>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
